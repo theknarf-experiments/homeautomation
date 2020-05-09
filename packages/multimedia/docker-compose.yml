@@ -1,0 +1,81 @@
+version: "2.1"
+services:
+  reverse-proxy:
+    image: traefik:v2.2
+    command:
+      - "--api.insecure=true"
+      # Enabling docker provider
+      - "--providers.docker"
+      # Do not expose containers unless explicitly told so
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  sonarr:
+    image: linuxserver/sonarr # https://github.com/linuxserver/docker-sonarr
+    container_name: sonarr
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - TZ=Europe/London
+      - UMASK_SET=022 #optional
+    volumes:
+      - ${DOCKER_TV_SERIES_FOLDER}:/tv
+      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.localhost`)"
+      - "traefik.sonarr.port=8989"
+    restart: unless-stopped
+  transmission:
+    image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
+    container_name: transmission
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - TZ=Europe/London
+      - USER=username #optional
+      - PASS=password #optional
+    volumes:
+      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
+    ports:
+      - 51413:51413
+      - 51413:51413/udp
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.localhost`)"
+      - "traefik.transmission.port=9091"
+    restart: unless-stopped
+  jackett:
+    image: linuxserver/jackett # https://hub.docker.com/r/linuxserver/jackett/
+    container_name: jackett
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - TZ=Europe/London
+    volumes:
+      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jackett.rule=Host(`jackett.localhost`)"
+      - "traefik.transmission.port=9117"
+    restart: unless-stopped
+  jellyfin:
+    image: linuxserver/jellyfin # https://hub.docker.com/r/linuxserver/jellyfin
+    container_name: jellyfin
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - TZ=Europe/London
+    volumes:
+      - /Users/knarf/Movies/library:/config
+      - ${DOCKER_TV_SERIES_FOLDER}:/data/tvshows
+      - ${DOCKER_MOVIES_FOLDER}:/data/movies
+      #- /opt/vc/lib:/opt/vc/lib #optional
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.localhost`)"
+      - "traefik.transmission.port=8096"
+    restart: unless-stopped
