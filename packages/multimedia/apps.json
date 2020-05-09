@@ -1,0 +1,8 @@
+{
+    "apps" : [
+        {"name":"Sonarr","url":"http://sonarr.localhost","icon":"television-box"},
+        {"name":"Transmission","url":"http://transmission.localhost","icon":"progress-download"},
+        {"name":"Jackett","url":"http://jackett.localhost","icon":"tshirt-crew-outline"},
+        {"name":"Jellyfin","url":"http://jellyfin.localhost","icon":"plex"}
+    ]
+}

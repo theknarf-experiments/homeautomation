@@ -13,6 +13,14 @@ services:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  sui:
+    container_name: sui
+    build:
+      context: ./
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sui.rule=Host(`sui.localhost`)"
+      - "traefik.sonarr.port=80"
   sonarr:
     image: linuxserver/sonarr # https://github.com/linuxserver/docker-sonarr
     container_name: sonarr
