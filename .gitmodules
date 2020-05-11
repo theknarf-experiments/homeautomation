@@ -1,3 +1,3 @@
 [submodule "packages/multimedia/sui"]
-	path = packages/multimedia/sui
+	path = packages/multimedia/dashboard/sui
 	url = git@github.com:ForSquirel/sui.git
