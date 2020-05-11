@@ -78,7 +78,7 @@ services:
       - PGID=${DOCKER_PGID}
       - TZ=Europe/London
     volumes:
-      - /Users/knarf/Movies/library:/config
+      - ${DOCKER_CONFIG_FOLDER}:/config
       - ${DOCKER_TV_SERIES_FOLDER}:/data/tvshows
       - ${DOCKER_MOVIES_FOLDER}:/data/movies
       #- /opt/vc/lib:/opt/vc/lib #optional
