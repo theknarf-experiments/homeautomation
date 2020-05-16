@@ -5,6 +5,19 @@ Edit the `.env` file before use.
 
 Once you've run `docker-compose up -d` you can visit `dashboard.localhost/`
 
+## Manual configuration
+After starting the services there's a bit of manual configuration needed. I hope to automate this in the future.
+
+1. Go to `dashboard.localhost` and click on `sonarr`.
+
+2. Go to `Settings` -> `Download Client` and click the `+` button under `Download Clients`.
+
+3. Select Transmission, give it a name and set the host to `transmission.multimedia_default`, also set the correct username and password.
+
+4. Hit the `test`-button to see that everything worked and then save
+
+5. Now go to `System` and hit the `Restart`-button (the button is an icon up in the right corner). After restarting the error about no download client should go away.
+
 ## TODO
 
 - Add bazarr for automatic subtitle downloads (https://github.com/linuxserver/docker-bazarr)
