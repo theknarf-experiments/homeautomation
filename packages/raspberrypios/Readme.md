@@ -45,3 +45,24 @@ sudo reboot
 ```
 
 3. Follow step 4 from [this instruction](https://www.docker.com/blog/happy-pi-day-docker-raspberry-pi/).
+
+## Install Snaps and terraform
+
+1. Run:
+
+``
+sudo apt update
+sudo apt install snapd
+```
+
+2. Reboot:
+
+```
+sudo reboot
+```
+
+3. Install terraform:
+
+```
+sudo snap install terraform --cnadidate
+```
