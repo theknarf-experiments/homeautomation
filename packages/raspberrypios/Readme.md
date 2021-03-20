@@ -29,7 +29,7 @@
 
 14. Run `sudo raspi-config` and set locale settings, ensure that `en_US-utf8` is checked.
 
-## Installing Docker
+## Installing Docker & docker-compose
 
 1. Run:
 
@@ -45,6 +45,20 @@ sudo reboot
 ```
 
 3. Follow step 4 from [this instruction](https://www.docker.com/blog/happy-pi-day-docker-raspberry-pi/).
+
+4. Install python3 and pip:
+
+```
+sudo apt-get install libffi-dev libssl-dev
+sudo apt install python3-dev
+sudo apt-get install -y python3 python3-pip
+```
+
+5. Install docker-compose:
+
+```
+sudo pip3 install docker-compose
+```
 
 ## Install Snaps and terraform
 
