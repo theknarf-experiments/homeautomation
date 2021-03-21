@@ -1,7 +1,7 @@
 version: "2.1"
 services:
   samba:
-    image: trnape/rpi-samba
+    image: trnape/rpi-samba # https://bitbucket.org/trnape/rpi-samba/src
     container_name: samba
     volumes:
       - /ssd:/share/ssd
