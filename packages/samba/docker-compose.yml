@@ -1,0 +1,10 @@
+version: "2.1"
+services:
+  samba:
+    image: trnape/rpi-samba
+    container_name: samba
+    volumes:
+      - /ssd:/share/ssd
+    command: -u "${DOCKER_USER}:${DOCKER_PASSWORD}" -s "Raspbbery pi ssd:/share/ssd:rw:${DOCKER_USER}"
+    ports:
+      - 445:445
