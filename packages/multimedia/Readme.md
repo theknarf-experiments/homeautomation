@@ -1,14 +1,33 @@
 # Multimedia
 
 Jellyfin media server with additional support services.
-Edit the `.env` file before use.
 
-Once you've run `docker-compose up -d` you can visit `dashboard.localhost/`
+## Setup
+
+1. Mount up a connected external drive to `/ssd`.
+[This](https://www.pidramble.com/wiki/benchmarks/external-usb-drives) and [this](https://www.raspberrypi.org/documentation/configuration/external-storage.md) article is helpfull.
+
+
+2. Give your user ownership over `/ssd`:
+
+```
+sudo chown -R $USER:$USER /ssd
+```
+
+3. Run `./setup.sh`
+
+4. Ensure that you have pulled git submodules:
+
+```
+git submodule update --init --recursive
+```
+
+4. Start the service (`docker-compose up -d`) and visit `raspberrypi:81/`
 
 ## Manual configuration
 After starting the services there's a bit of manual configuration needed. I hope to automate this in the future.
 
-1. Go to `dashboard.localhost` and click on `sonarr`.
+1. Go to `raspberrypi:81` and click on `sonarr`.
 
 2. Go to `Settings` -> `Download Client` and click the `+` button under `Download Clients`.
 
