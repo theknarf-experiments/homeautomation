@@ -1,11 +1,26 @@
 version: "2.1"
 services:
+  reverse-proxy:
+    image: traefik:v2.4
+    command:
+      - "--api.insecure=true"
+      # Enabling docker provider
+      - "--providers.docker"
+      # Do not expose containers unless explicitly told so
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - 81:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   dashboard:
     container_name: sui
     build:
       context: ./dashboard/
-    ports:
-      - 81:80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`${DOCKER_HOSTNAME}`)"
+      - "traefik.dashboard.port=80"
   sonarr:
     image: linuxserver/sonarr # https://github.com/linuxserver/docker-sonarr
     container_name: sonarr
@@ -64,10 +79,10 @@ services:
       - ${DOCKER_TV_SERIES_FOLDER}:/data/tvshows
       - ${DOCKER_MOVIES_FOLDER}:/data/movies
 #      - /opt/vc/lib:/opt/vc/lib #optional
-    ports:
-      - 85:8096
     devices:
       - /dev/video10:/dev/video10
       - /dev/video11:/dev/video11
       - /dev/video12:/dev/video12
+    ports:
+      - 85:8096
     restart: unless-stopped
