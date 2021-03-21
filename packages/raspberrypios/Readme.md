@@ -64,7 +64,7 @@ sudo pip3 install docker-compose
 
 1. Run:
 
-``
+```
 sudo apt update
 sudo apt install snapd
 ```
