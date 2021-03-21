@@ -1,0 +1,15 @@
+version: "2.1"
+services:
+  # Double check instructions on: https://github.com/marthoc/docker-deconz
+  deconz:
+    image: marthoc/deconz:stable
+    network_mode: host
+    restart: always
+    volumes:
+      - /home/knarf/projects/homeautomation/packages/iot/deconz:/root/.local/share/dresden-elektronik/deCONZ
+      - /etc/localtime:/etc/localtime:ro
+    devices:
+      - /dev/serial0
+      - /dev/ttyS0
+    environment:
+      - DECONZ_DEVICE=/dev/ttyS0
