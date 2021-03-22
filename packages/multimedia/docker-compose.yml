@@ -9,7 +9,7 @@ services:
       # Do not expose containers unless explicitly told so
       - "--providers.docker.exposedbydefault=false"
     ports:
-      - 81:80
+      - 80:80
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -19,7 +19,7 @@ services:
       context: ./dashboard/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`${DOCKER_HOSTNAME}`)"
+      - "traefik.http.routers.dashboard.rule=Host(`${DOCKER_HOSTNAME}`) || Host(`rpi.theknarf.com`)"
       - "traefik.dashboard.port=80"
   sonarr:
     image: linuxserver/sonarr # https://github.com/linuxserver/docker-sonarr
@@ -33,9 +33,11 @@ services:
       - ${DOCKER_CONFIG_FOLDER}/sonarr:/config
       - ${DOCKER_TV_SERIES_FOLDER}:/tv
       - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
-    ports:
-      - 82:8989
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.rpi.theknarf.com`)"
+      - "traefik.sonarr.port=8989"
   transmission:
     image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
     container_name: transmission
@@ -51,8 +53,11 @@ services:
     ports:
       - 51413:51413
       - 51413:51413/udp
-      - 83:9091
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.rpi.theknarf.com`)"
+      - "traefik.transmission.port=9091"
   jackett:
     image: linuxserver/jackett # https://hub.docker.com/r/linuxserver/jackett/
     container_name: jackett
@@ -63,9 +68,11 @@ services:
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/jackett:/config
       - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
-    ports:
-      - 84:9117
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jackett.rule=Host(`jackett.rpi.theknarf.com`)"
+      - "traefik.jackett.port=9117"
   jellyfin:
     image: ghcr.io/linuxserver/jellyfin:arm32v7-latest # https://hub.docker.com/r/linuxserver/jellyfin
     container_name: jellyfin
@@ -83,6 +90,8 @@ services:
       - /dev/video10:/dev/video10
       - /dev/video11:/dev/video11
       - /dev/video12:/dev/video12
-    ports:
-      - 85:8096
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.rpi.theknarf.com`)"
+      - "traefik.jellyfin.port=8096"
     restart: unless-stopped

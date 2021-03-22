@@ -1,8 +1,8 @@
 {
     "apps" : [
-        {"name":"Sonarr","url":"http://raspberrypi:82/","icon":"television-box"},
-        {"name":"Transmission","url":"http://raspberrypi:83","icon":"progress-download"},
-        {"name":"Jackett","url":"http://raspberrypi:84","icon":"tshirt-crew-outline"},
-        {"name":"Jellyfin","url":"http://raspberrypi:85","icon":"plex"}
+        {"name":"Sonarr","url":"http://sonarr.rpi.theknarf.com/","icon":"television-box"},
+        {"name":"Transmission","url":"http://transmission.rpi.theknarf.com","icon":"progress-download"},
+        {"name":"Jackett","url":"http://jackett.rpi.theknarf.com","icon":"tshirt-crew-outline"},
+        {"name":"Jellyfin","url":"http://jellyfin.rpi.theknarf.com","icon":"plex"}
     ]
 }

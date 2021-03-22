@@ -13,3 +13,4 @@ services:
       - /dev/ttyS0
     environment:
       - DECONZ_DEVICE=/dev/ttyS0
+      - DECONZ_WEB_PORT=8081
