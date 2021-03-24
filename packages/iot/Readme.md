@@ -22,6 +22,11 @@ docker-compose up -d
 
 5. Open the ip of your raspberry pi in your browser and setup IoT devices
 
-## Backup and restore instructions
+## Other guides
 
-https://flemmingss.com/how-to-backup-and-restore-deconz-from-a-defective-installation/
+- [Backup and restore instructions](https://flemmingss.com/how-to-backup-and-restore-deconz-from-a-defective-installation/)
+
+- [Network lost and configuration restore does not help](https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/Network-lost-and-configuration-restore-does-not-help)
+
+- [Zigbee Error Codes in the Log](https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/Zigbee-Error-Codes-in-the-Log)
+
