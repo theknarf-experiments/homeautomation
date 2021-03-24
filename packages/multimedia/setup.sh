@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # If you have mounted the ssd somewhere else then change this variable before running
-SSD_FOLDER="/ssd"
+SSD_FOLDER="/media/ssd"
 
 
 # Creating folders

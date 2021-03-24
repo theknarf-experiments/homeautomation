@@ -4,7 +4,7 @@ services:
     image: trnape/rpi-samba # https://bitbucket.org/trnape/rpi-samba/src
     container_name: samba
     volumes:
-      - /ssd:/share/ssd
+      - /media/ssd:/share/ssd
     command: -u "${DOCKER_USER}:${DOCKER_PASSWORD}" -s "Raspbbery pi ssd:/share/ssd:rw:${DOCKER_USER}"
     ports:
       - 445:445
