@@ -1,10 +1,15 @@
 version: "2.1"
 services:
   samba:
-    image: trnape/rpi-samba # https://bitbucket.org/trnape/rpi-samba/src
     container_name: samba
+    build:
+      context: ./rpi-samba/
     volumes:
-      - /media/ssd:/share/ssd
-    command: -u "${DOCKER_USER}:${DOCKER_PASSWORD}" -s "Raspbbery pi ssd:/share/ssd:rw:${DOCKER_USER}"
+      - /media/ssd:/shared/ssd
     ports:
       - 445:445
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - TZ=${DOCKER_TIMEZONE}
+      - SAMBA_PASSWORD=${DOCKER_SAMBA_PASSWORD}
