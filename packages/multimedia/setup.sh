@@ -30,13 +30,15 @@ echo ""
 PUID=`id -u $USER`
 PGID=`id -g $USER`
 TIMEZONE=`cat /etc/timezone`
+HOSTNAME=`cat /etc/hostname`
 
 echo "What password do you want to use for Transmission / Torrent?"
 read -sp "Password: " TORRENT_PASSWORD
 
 echo "Creating a .env file"
 cat > .env <<- EOM
-DOCKER_HOSTNAME=raspberrypi
+DOCKER_HOSTNAME=$HOSTNAME
+DOCKER_DOMAINNAME=rpi.theknarf.com
 DOCKER_TIMEZONE=$TIMEZONE
 DOCKER_PUID=$PUID
 DOCKER_PGID=$PGID
