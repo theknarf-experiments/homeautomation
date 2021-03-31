@@ -1,28 +1,18 @@
-version: "2.1"
+version: "3.5"
 services:
-  reverse-proxy:
-    image: traefik:v2.4
-    command:
-      - "--api.insecure=true"
-      # Enabling docker provider
-      - "--providers.docker"
-      # Do not expose containers unless explicitly told so
-      - "--providers.docker.exposedbydefault=false"
-    ports:
-      - 80:80
-      - 8080:8080
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
   dashboard:
     container_name: sui
     build:
       context: ./dashboard/
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.dashboard.rule=Host(`localhost`) || Host(`${DOCKER_HOSTNAME}`) || Host(`${DOCKER_DOMAINNAME}`)"
       - "traefik.dashboard.port=80"
     restart: unless-stopped
+    networks:
+      - traefik
+      - default
   sonarr:
     image: linuxserver/sonarr # https://github.com/linuxserver/docker-sonarr
     container_name: sonarr
@@ -38,8 +28,12 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.localhost`) || Host(`sonarr.${DOCKER_DOMAINNAME}`)"
       - "traefik.sonarr.port=8989"
+    networks:
+      - traefik
+      - default
   transmission:
     image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
     container_name: transmission
@@ -58,8 +52,12 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.transmission.rule=Host(`transmission.localhost`) || Host(`transmission.${DOCKER_DOMAINNAME}`)"
       - "traefik.transmission.port=9091"
+    networks:
+      - traefik
+      - default
   jackett:
     image: linuxserver/jackett # https://hub.docker.com/r/linuxserver/jackett/
     container_name: jackett
@@ -73,8 +71,12 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.jackett.rule=Host(`jackett.localhost`) || Host(`jackett.${DOCKER_DOMAINNAME}`)"
       - "traefik.jackett.port=9117"
+    networks:
+      - traefik
+      - default
   jellyfin:
     image: ghcr.io/linuxserver/jellyfin:arm32v7-latest # https://hub.docker.com/r/linuxserver/jellyfin
     container_name: jellyfin
@@ -94,6 +96,15 @@ services:
       - /dev/video12:/dev/video12
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.localhost`) || Host(`jellyfin.${DOCKER_DOMAINNAME}`)"
       - "traefik.jellyfin.port=8096"
     restart: unless-stopped
+    networks:
+      - traefik
+      - default
+
+networks:
+  traefik:
+    external:
+      name: traefik_network

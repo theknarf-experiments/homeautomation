@@ -1,0 +1,22 @@
+version: "2.1"
+services:
+  reverse-proxy:
+    image: traefik:v2.4
+    command:
+      - "--api.insecure=true"
+      # Enabling docker provider
+      - "--providers.docker"
+      # Do not expose containers unless explicitly told so
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    name: traefik_network
