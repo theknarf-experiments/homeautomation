@@ -20,7 +20,7 @@ services:
       context: ./dashboard/
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`${DOCKER_HOSTNAME}`) || Host(`${DOCKER_DOMAINNAME}`)"
+      - "traefik.http.routers.dashboard.rule=Host(`localhost`) || Host(`${DOCKER_HOSTNAME}`) || Host(`${DOCKER_DOMAINNAME}`)"
       - "traefik.dashboard.port=80"
     restart: unless-stopped
   sonarr:
@@ -38,7 +38,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.${DOCKER_DOMAINNAME}`)"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.localhost`) || Host(`sonarr.${DOCKER_DOMAINNAME}`)"
       - "traefik.sonarr.port=8989"
   transmission:
     image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
@@ -58,7 +58,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.transmission.rule=Host(`transmission.${DOCKER_DOMAINNAME}`)"
+      - "traefik.http.routers.transmission.rule=Host(`transmission.localhost`) || Host(`transmission.${DOCKER_DOMAINNAME}`)"
       - "traefik.transmission.port=9091"
   jackett:
     image: linuxserver/jackett # https://hub.docker.com/r/linuxserver/jackett/
@@ -73,7 +73,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jackett.rule=Host(`jackett.${DOCKER_DOMAINNAME}`)"
+      - "traefik.http.routers.jackett.rule=Host(`jackett.localhost`) || Host(`jackett.${DOCKER_DOMAINNAME}`)"
       - "traefik.jackett.port=9117"
   jellyfin:
     image: ghcr.io/linuxserver/jellyfin:arm32v7-latest # https://hub.docker.com/r/linuxserver/jellyfin
@@ -94,6 +94,6 @@ services:
       - /dev/video12:/dev/video12
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.${DOCKER_DOMAINNAME}`)"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.localhost`) || Host(`jellyfin.${DOCKER_DOMAINNAME}`)"
       - "traefik.jellyfin.port=8096"
     restart: unless-stopped
