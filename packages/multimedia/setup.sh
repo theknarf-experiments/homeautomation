@@ -13,9 +13,11 @@ mkdir -p $SSD_FOLDER/config/jackett
 mkdir -p $SSD_FOLDER/config/transmission
 mkdir -p $SSD_FOLDER/config/jellyfin
 
-
 echo " - Creating ${SSD_FOLDER}/downloads"
 mkdir -p $SSD_FOLDER/downloads
+
+echo " - Creating ${SSD_FOLDER}/youtube_downloads"
+mkdir -p $SSD_FOLDER/youtube_downloads
 
 echo " - Creating ${SSD_FOLDER}/tv"
 mkdir -p $SSD_FOLDER/tv
@@ -46,6 +48,7 @@ DOCKER_CONFIG_FOLDER=$SSD_FOLDER/config
 DOCKER_DOWNLOADS_FOLDER=$SSD_FOLDER/downloads
 DOCKER_TV_SERIES_FOLDER=$SSD_FOLDER/tv
 DOCKER_MOVIES_FOLDER=$SSD_FOLDER/movies
+DOCKER_YOUTUBE_DOWNLOADS_FOLDER=$SSD_FOLDER/youtube_downloads
 DOCKER_TORRENT_USERNAME=$USER
 DOCKER_TORRENT_PASSWORD=$TORRENT_PASSWORD
 EOM

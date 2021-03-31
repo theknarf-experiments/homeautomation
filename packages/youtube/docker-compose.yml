@@ -1,0 +1,24 @@
+version: "3.5"
+services:
+  metube:
+    image: alexta69/metube
+    container_name: metube
+    restart: unless-stopped
+    user: "${DOCKER_PUID}:${DOCKER_PGID}"
+    ports:
+      - "8081:8081"
+    volumes:
+      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.metube.rule=Host(`metube.localhost`) || Host(`metube.${DOCKER_DOMAINNAME}`)"
+      - "traefik.metube.port=8081"
+    networks:
+      - traefik
+      - default
+
+networks:
+  traefik:
+    external:
+      name: traefik_network

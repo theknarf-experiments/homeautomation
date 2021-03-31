@@ -43,12 +43,6 @@ After starting the services there's a bit of manual configuration needed. I hope
 
 - Investigate Radarr (https://radarr.video/)
 
-- Find some kind of solution for downloading youtube videoes into Jellyfin, aka some kind of web-gui for youtube-dl
-
-  - https://github.com/d0u9/youtube-dl-webui
-
-  - https://github.com/Rudloff/alltube
-
 - Fix the docker setup so that sonarr automatically gets configured to use transmission instead of having to do it manually
 
 - Create a script that listens to Jackett's api and updates Sonarr when I add new sources in Jackett

@@ -84,11 +84,11 @@ services:
       - PUID=${DOCKER_PUID}
       - PGID=${DOCKER_PGID}
       - TZ=${DOCKER_TIMEZONE}
-      - JELLYFIN_PublishedServerUrl=192.168.1.170
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/jellyfin:/config
       - ${DOCKER_TV_SERIES_FOLDER}:/data/tvshows
       - ${DOCKER_MOVIES_FOLDER}:/data/movies
+      - ${DOCKER_YOUTUBE_DOWNLOADS_FOLDER}:/data/youtube
 #      - /opt/vc/lib:/opt/vc/lib #optional
     devices:
       - /dev/video10:/dev/video10
