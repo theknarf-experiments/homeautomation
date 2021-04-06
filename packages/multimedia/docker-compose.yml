@@ -93,7 +93,7 @@ services:
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.localhost`) || Host(`jellyfin.${DOCKER_DOMAINNAME}`)"
       - "traefik.jellyfin.port=8096"
       - "dave.relativeSubdomain=jellyfin"
-      - "dave.icon=mdi-plex"
+      - "dave.icon=simple-icons:jellyfin"
     restart: unless-stopped
     networks:
       - traefik
