@@ -16,12 +16,6 @@ sudo chown -R $USER:$USER /media/ssd
 
 3. Run `./setup.sh`
 
-4. Ensure that you have pulled git submodules:
-
-```
-git submodule update --init --recursive
-```
-
 4. Start the service (`docker-compose up -d`) and visit `raspberrypi/`
 
 ## Manual configuration

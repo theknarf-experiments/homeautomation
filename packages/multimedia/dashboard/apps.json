@@ -1,8 +1,0 @@
-{
-    "apps" : [
-        {"name":"Sonarr","url":"http://sonarr.rpi.theknarf.com/","icon":"television-box"},
-        {"name":"Transmission","url":"http://transmission.rpi.theknarf.com","icon":"progress-download"},
-        {"name":"Jackett","url":"http://jackett.rpi.theknarf.com","icon":"tshirt-crew-outline"},
-        {"name":"Jellyfin","url":"http://jellyfin.rpi.theknarf.com","icon":"plex"}
-    ]
-}

@@ -16,6 +16,22 @@ services:
     restart: unless-stopped
     networks:
       - traefik
+      - default
+
+  dave:
+    image: theknarf/dave
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.dave.rule=Host(`localhost`) || Host(`${DOCKER_HOSTNAME}`) || Host(`${DOCKER_DOMAINNAME}`)"
+      - "traefik.dashboard.port=80"
+    restart: unless-stopped
+    networks:
+      - traefik
+      - default
+
 
 networks:
   traefik:

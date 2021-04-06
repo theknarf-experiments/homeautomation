@@ -1,18 +1,5 @@
 version: "3.5"
 services:
-  dashboard:
-    container_name: sui
-    build:
-      context: ./dashboard/
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
-      - "traefik.http.routers.dashboard.rule=Host(`localhost`) || Host(`${DOCKER_HOSTNAME}`) || Host(`${DOCKER_DOMAINNAME}`)"
-      - "traefik.dashboard.port=80"
-    restart: unless-stopped
-    networks:
-      - traefik
-      - default
   sonarr:
     image: linuxserver/sonarr # https://github.com/linuxserver/docker-sonarr
     container_name: sonarr
@@ -31,9 +18,11 @@ services:
       - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.localhost`) || Host(`sonarr.${DOCKER_DOMAINNAME}`)"
       - "traefik.sonarr.port=8989"
+      - "dave.relativeSubdomain=sonarr"
     networks:
       - traefik
       - default
+
   transmission:
     image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
     container_name: transmission
@@ -55,9 +44,11 @@ services:
       - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.transmission.rule=Host(`transmission.localhost`) || Host(`transmission.${DOCKER_DOMAINNAME}`)"
       - "traefik.transmission.port=9091"
+      - "dave.relativeSubdomain=transmission"
     networks:
       - traefik
       - default
+
   jackett:
     image: linuxserver/jackett # https://hub.docker.com/r/linuxserver/jackett/
     container_name: jackett
@@ -74,9 +65,11 @@ services:
       - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.jackett.rule=Host(`jackett.localhost`) || Host(`jackett.${DOCKER_DOMAINNAME}`)"
       - "traefik.jackett.port=9117"
+      - "dave.relativeSubdomain=jackett"
     networks:
       - traefik
       - default
+
   jellyfin:
     image: ghcr.io/linuxserver/jellyfin:arm32v7-latest # https://hub.docker.com/r/linuxserver/jellyfin
     container_name: jellyfin
@@ -99,7 +92,29 @@ services:
       - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.localhost`) || Host(`jellyfin.${DOCKER_DOMAINNAME}`)"
       - "traefik.jellyfin.port=8096"
+      - "dave.relativeSubdomain=jellyfin"
+      - "dave.icon=mdi-plex"
     restart: unless-stopped
+    networks:
+      - traefik
+      - default
+
+  metube:
+    image: alexta69/metube
+    container_name: metube
+    restart: unless-stopped
+    user: "${DOCKER_PUID}:${DOCKER_PGID}"
+    ports:
+      - "8081:8081"
+    volumes:
+      - ${DOCKER_YOUTUBE_DOWNLOADS_FOLDER}:/downloads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.metube.rule=Host(`metube.localhost`) || Host(`metube.${DOCKER_DOMAINNAME}`)"
+      - "traefik.metube.port=8081"
+      - "dave.relativeSubdomain=metube"
+      - "dave.icon=mdi-youtube"
     networks:
       - traefik
       - default

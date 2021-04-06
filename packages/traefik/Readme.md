@@ -3,6 +3,7 @@
 Reverse proxy, needs to be staretd before other `packages` in this project.
 
 ```
+./setup.sh
 docker-compose up -d
 ```
 
