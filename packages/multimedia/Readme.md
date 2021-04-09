@@ -35,8 +35,6 @@ After starting the services there's a bit of manual configuration needed. I hope
 
 - Add bazarr for automatic subtitle downloads (https://github.com/linuxserver/docker-bazarr)
 
-- Investigate Radarr (https://radarr.video/)
-
 - Fix the docker setup so that sonarr automatically gets configured to use transmission instead of having to do it manually
 
 - Create a script that listens to Jackett's api and updates Sonarr when I add new sources in Jackett

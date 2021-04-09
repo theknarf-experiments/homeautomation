@@ -23,6 +23,29 @@ services:
       - traefik
       - default
 
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - TZ=${DOCKER_TIMEZONE}
+    volumes:
+      - ${DOCKER_CONFIG_FOLDER}/radarr:/config
+      - ${DOCKER_MOVIES_FOLDER}:/movies
+      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.localhost`) || Host(`radarr.${DOCKER_DOMAINNAME}`)"
+      - "traefik.sonarr.port=7878"
+      - "dave.relativeSubdomain=radarr"
+    networks:
+      - traefik
+      - default
+
+
   transmission:
     image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
     container_name: transmission
