@@ -45,6 +45,27 @@ services:
       - traefik
       - default
 
+  bazarr:
+    image: linuxserver/bazarr
+    container_name: bazarr
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - TZ=${DOCKER_TIMEZONE}
+    volumes:
+      - ${DOCKER_CONFIG_FOLDER}/bazarr:/config
+      - ${DOCKER_MOVIES_FOLDER}:/movies
+      - ${DOCKER_TV_SERIES_FOLDER}:/tv
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.bazarr.rule=Host(`bazarr.localhost`) || Host(`bazarr.${DOCKER_DOMAINNAME}`)"
+      - "traefik.sonarr.port=6767"
+      - "dave.relativeSubdomain=bazarr"
+    networks:
+      - traefik
+      - default
 
   transmission:
     image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
