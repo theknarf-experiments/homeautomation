@@ -1,0 +1,49 @@
+version: "3.5"
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ${DOCKER_PROMETHEUS_FOLDER}:/etc/prometheus
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`) || Host(`prometheus.${DOCKER_DOMAINNAME}`)"
+      - "traefik.prometheus.port=9090"
+      - "dave.relativeSubdomain=prometheus"
+    networks:
+      - traefik
+      - default
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.localhost`) || Host(`grafana.${DOCKER_DOMAINNAME}`)"
+      - "traefik.grafana.port=3000"
+      - "dave.relativeSubdomain=grafana"
+    networks:
+      - traefik
+      - default
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+#    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
+    networks:
+      - default
+
+networks:
+  traefik:
+    external:
+      name: traefik_network
