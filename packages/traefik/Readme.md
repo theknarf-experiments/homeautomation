@@ -4,6 +4,13 @@ Reverse proxy, needs to be staretd before other `packages` in this project.
 
 ```
 ./setup.sh
+docker-compose up -d --profile caddy
+```
+
+Or run the following if you don't want caddy:
+
+```
+./setup.sh # Answer blank to digitalocean key
 docker-compose up -d
 ```
 

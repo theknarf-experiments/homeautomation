@@ -3,7 +3,6 @@ services:
   # Double check instructions on: https://github.com/marthoc/docker-deconz
   deconz:
     image: marthoc/deconz:latest
-    network_mode: host
     restart: unless-stopped
     volumes:
       - /home/knarf/projects/homeautomation/packages/iot/deconz:/root/.local/share/dresden-elektronik/deCONZ
@@ -14,3 +13,18 @@ services:
     environment:
       - DECONZ_DEVICE=/dev/ttyS0
       - DECONZ_WEB_PORT=80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.deconz.rule=Host(`deconz.localhost`) || Host(`deconz.${DOCKER_HOSTNAME}`) || Host(`deconz.${DOCKER_DOMAINNAME}`)"
+      - "dave.relativeSubdomain=deconz"
+      - "dave.icon=mdi-mdi:zigbee"
+    networks:
+      - traefik
+      - default
+
+
+networks:
+  traefik:
+    external:
+      name: traefik_network

@@ -15,10 +15,15 @@ HOSTNAME=`cat /etc/hostname`
 
 read -sp "Digitalocean api token: " DIGITALOCEAN_API_TOKEN
 
+echo "\n"
+
+read -p "Domainname (rpi.theknarf.com): " DOMAIN_NAME
+DOMAIN_NAME=${DOMAIN_NAME:-rpi.theknarf.com}
+
 echo "Creating a .env file"
 cat > .env <<- EOM
 DOCKER_HOSTNAME=$HOSTNAME
-DOCKER_DOMAINNAME=rpi.theknarf.com
+DOCKER_DOMAINNAME=$DOMAIN_NAME
 DIGITALOCEAN_API_TOKEN=$DIGITALOCEAN_API_TOKEN
 DOCKER_CONFIG_FOLDER=$SSD_FOLDER/config/caddy/data
 DOCKER_DATA_FOLDER=$SSD_FOLDER/config/caddy/config
