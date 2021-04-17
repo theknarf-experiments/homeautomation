@@ -18,11 +18,36 @@ services:
       - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.deconz.rule=Host(`deconz.localhost`) || Host(`deconz.${DOCKER_HOSTNAME}`) || Host(`deconz.${DOCKER_DOMAINNAME}`)"
       - "dave.relativeSubdomain=deconz"
-      - "dave.icon=mdi-mdi:zigbee"
+      - "dave.icon=mdi:zigbee"
     networks:
       - traefik
       - default
 
+  node-red:
+    container_name: nodered
+    build: ./nodered
+    depends_on:
+      - deconz
+    user: ${DOCKER_PUID}
+#    environment:
+#      - 
+    container_name: node-red
+    restart: unless-stopped
+    volumes:
+      - ${DOCKER_NODERED_CONFIG_FOLDER}:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.nodered.rule=Host(`nodered.localhost`) || Host(`nodered.${DOCKER_HOSTNAME}`) || Host(`nodered.${DOCKER_DOMAINNAME}`)"
+      - "traefik.nodered.port=1880"
+      - "dave.relativeSubdomain=nodered"
+      - "dave.icon=cib:node-red"
+
+    networks:
+      - traefik
+      - default
 
 networks:
   traefik:
