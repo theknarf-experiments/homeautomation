@@ -26,6 +26,53 @@ services:
       - traefik
       - default
 
+  kaizoku:
+    container_name: kaizoku
+    image: ghcr.io/oae/kaizoku:latest
+    environment:
+      - DATABASE_URL=postgresql://kaizoku:kaizoku@kaizokudb:5432/kaizoku
+      - KAIZOKU_PORT=3000
+      - REDIS_HOST=kaizokuredis
+      - REDIS_PORT=6379
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+    volumes:
+      - ${DOCKER_COMIC_FOLDER}:/data
+      - ${DOCKER_COMIC_FOLDER}/kaizoku:/config
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    depends_on:
+      kaizokudb:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.http.routers.kaizoku.rule=Host(`kaizoku.localhost`) || Host(`kaizoku.${DOCKER_DOMAINNAME}`)"
+      - "traefik.komga.port=3000"
+      - "dave.relativeSubdomain=kaizoku"
+      - "dave.icon=arcticons:manga-up"
+
+  kaizokuredis:
+    image: redis:7-alpine
+    volumes:
+      - redis:/data
+
+  kaizokudb:
+    container_name: kaizokudb
+    image: postgres:alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kaizoku']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=kaizoku
+      - POSTGRES_DB=kaizoku
+      - POSTGRES_PASSWORD=kaizoku
+    volumes:
+      - db:/var/lib/postgresql/data
+
 networks:
   traefik:
     external:
