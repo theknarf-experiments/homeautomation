@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   traefik:
     container_name: traefik
@@ -24,6 +25,8 @@ services:
     image: theknarf/dave
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - "../../.env"
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_network"
