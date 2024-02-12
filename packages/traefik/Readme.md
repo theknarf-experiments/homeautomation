@@ -1,6 +1,6 @@
 # Traefik
 
-Reverse proxy, needs to be staretd before other `packages` in this project.
+Reverse proxy, needs to be stareted before other `packages` in this project.
 
 ```
 ./setup.sh

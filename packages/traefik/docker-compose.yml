@@ -2,7 +2,7 @@ version: "3.9"
 services:
   traefik:
     container_name: traefik
-    image: traefik:v2.4
+    image: traefik:v3.0
     command:
       - "--api.insecure=true"
       # Enabling docker provider
@@ -27,30 +27,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_network"
-      - "traefik.http.routers.dave.rule=Host(`localhost`) || Host(`${DOCKER_HOSTNAME}`) || Host(`${DOCKER_DOMAINNAME}`)"
-      - "traefik.dashboard.port=80"
+      - "traefik.http.routers.dave.rule=PathPrefix(`/`) || Host(`${DOCKER_DOMAINNAME}`)"
+      - "traefik.http.routers.nginx.priority=1"
     restart: unless-stopped
     networks:
       - traefik
       - default
-
-  caddy:
-    container_name: caddy
-    build:
-      context: ./caddy/
-      args:
-        - DIGITALOCEAN_API_TOKEN=${DIGITALOCEAN_API_TOKEN}
-    volumes:
-      - ${DOCKER_CONFIG_FOLDER}:/config
-      - ${DOCKER_DATA_FOLDER}:/data
-    ports:
-      - 443:443
-    restart: unless-stopped
-    networks:
-      - traefik
-      - default
-    profiles:
-      - caddy
 
 networks:
   traefik:
