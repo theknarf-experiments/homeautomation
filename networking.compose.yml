@@ -1,0 +1,41 @@
+services:
+  # https://github.com/oetiker/SmokePing
+  # https://hub.docker.com/r/linuxserver/smokeping
+  smokeping:
+    container_name: smokeping
+    image: lscr.io/linuxserver/smokeping:latest
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+    volumes:
+      - ${DOCKER_CONFIG_FOLDER}/smokeping:/config
+      - ${MEDIA_LOCATION}/smokeping:/data
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.smokeping.rule=Host(`smokeping.${DOCKER_DOMAINNAME}`)"
+      - "dave.relativeSubdomain=smokeping"
+      - "dave.icon=tabler:ping-pong"
+    restart: unless-stopped
+    profiles:
+      - networking
+
+  # https://hub.docker.com/r/linuxserver/librespeed
+  librespeed:
+    container_name: librespeed
+    image: lscr.io/linuxserver/librespeed:latest
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+      - PASSWORD=PASSWORD
+    volumes:
+      - ${DOCKER_CONFIG_FOLDER}/librespeed:/config
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.librespeed.rule=Host(`librespeed.${DOCKER_DOMAINNAME}`)"
+      - "dave.relativeSubdomain=librespeed"
+      - "dave.icon=arcticons:librespeed"
+    restart: unless-stopped

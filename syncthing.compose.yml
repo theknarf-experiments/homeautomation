@@ -1,0 +1,27 @@
+services:
+  syncthing:
+    container_name: syncthing
+    image: lscr.io/linuxserver/syncthing:latest
+    hostname: rpi5.theknarf.com
+    environment:
+      - PUID=${DOCKER_PUID}
+      - PGID=${DOCKER_PGID}
+    volumes:
+      - ${DOCKER_CONFIG_FOLDER}/syncthing:/config
+      - ${MEDIA_LOCATION}:/data
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      #- 8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.syncthing.rule=Host(`syncthing.${DOCKER_DOMAINNAME}`)"
+      - "traefik.http.services.syncthing.loadbalancer.server.port=8384"
+      - "dave.relativeSubdomain=syncthing"
+      - "dave.icon=arcticons:syncthing"
+    restart: unless-stopped
+    profiles:
+      - syncthing

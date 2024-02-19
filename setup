@@ -1,17 +1,70 @@
-#!/bin/bash
+#!/bin/bash -e
+
+prompt_for_input() {
+    local prompt_message="$1"
+    local default_value="$2"
+    local secret="$3" # If set to 'secret', input will be hidden
+    local user_input
+
+    if [ "$secret" == "secret" ]; then
+        read -sp "$prompt_message ($default_value): " user_input
+        echo >&2  # Add a newline after the hidden input, directed to stderr
+    else
+        read -p "$prompt_message ($default_value): " user_input
+    fi
+    echo >&2  # Ensure a newline is printed after each input, directed to stderr
+
+    if [ -z "$user_input" ]; then
+        user_input="$default_value"
+    fi
+
+    echo "$user_input"  # Echo back only the final value for assignment
+}
+
+# Media location
+MEDIA_LOCATION_DEFAULT="/home/$USER/media"
+MEDIA_LOCATION=$(prompt_for_input "Media location" "$MEDIA_LOCATION_DEFAULT")
+mkdir -p "$MEDIA_LOCATION/config/komga"
+mkdir -p "$MEDIA_LOCATION/config/sonarr"
+mkdir -p "$MEDIA_LOCATION/config/jackett"
+mkdir -p "$MEDIA_LOCATION/config/transmission"
+mkdir -p "$MEDIA_LOCATION/config/jellyfin"
+mkdir -p "$MEDIA_LOCATION/config/smokeping"
+mkdir -p "$MEDIA_LOCATION/config/librespeed"
+mkdir -p "$MEDIA_LOCATION/config/syncthing"
+mkdir -p "$MEDIA_LOCATION/comic"
+mkdir -p "$MEDIA_LOCATION/downloads"
+mkdir -p "$MEDIA_LOCATION/youtube"
+mkdir -p "$MEDIA_LOCATION/tv"
+mkdir -p "$MEDIA_LOCATION/movies"
+mkdir -p "$MEDIA_LOCATION/prometheus"
+mkdir -p "$MEDIA_LOCATION/smokeping"
+
+# Get digital ocean api token
+DIGITALOCEAN_API_TOKEN=$(prompt_for_input "Digitalocean api token" "" "secret")
+
+# Get hostname and domain name
+HOSTNAME=$(cat /etc/hostname)
+DEFAULT_DOMAIN="$HOSTNAME.theknarf.com"
+DOMAIN_NAME=$(prompt_for_input "Domain name" "$DEFAULT_DOMAIN")
+
+# Get password for Transmission
+echo "What password do you want to use for Transmission / Torrent?"
+TORRENT_PASSWORD=$(prompt_for_input "Password" "" "secret")
+
+# Get user id and group id
+PUID=$(id -u $USER)
+PGID=$(id -g $USER)
 
 # Writing env file
-HOSTNAME=`cat /etc/hostname`
-
-read -sp "Digitalocean api token: " DIGITALOCEAN_API_TOKEN
-echo "\n"
-
-DEFAULT_DOMAIN="$HOSTNAME.theknarf.com"
-read -p "Domainname ($DEFAULT_DOMAIN): " DOMAIN_NAME
-DOMAIN_NAME=${DOMAIN_NAME:-$DEFAULT_DOMAIN}
-
 echo "Creating a .env file"
 cat > .env <<- EOM
+DOCKER_PUID=$PUID
+DOCKER_PGID=$PGID
 DOCKER_DOMAINNAME=$DOMAIN_NAME
 DIGITALOCEAN_API_TOKEN=$DIGITALOCEAN_API_TOKEN
+MEDIA_LOCATION=$MEDIA_LOCATION
+DOCKER_TORRENT_PASSWORD=$TORRENT_PASSWORD
+DOCKER_CONFIG_FOLDER=$MEDIA_LOCATION/config
 EOM
+

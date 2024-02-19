@@ -1,0 +1,19 @@
+version: "3.5"
+services:
+  komga:
+    image: gotson/komga
+    container_name: komga
+    volumes:
+      - "$MEDIA_LOCATION/config/komga:/config"
+      - "$MEDIA_LOCATION/comic:/data"
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    user: "${DOCKER_PUID}:${DOCKER_PGID}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.komga.rule=Host(`komga.${DOCKER_DOMAINNAME}`)"
+      - "dave.relativeSubdomain=komga"
+      - "dave.icon=arcticons:comicscreen"
+    restart: unless-stopped
+    profiles:
+      - comic

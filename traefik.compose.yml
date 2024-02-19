@@ -16,27 +16,13 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-    networks:
-      - traefik
-      - default
 
   dave:
     container_name: dave
     image: theknarf/dave
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    env_file:
-      - "../../.env"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
-      - "traefik.http.routers.dave.rule=PathPrefix(`/`) || Host(`${DOCKER_DOMAINNAME}`)"
-      - "traefik.http.routers.nginx.priority=1"
+      - "traefik.http.routers.dave.rule=Host(`${DOCKER_DOMAINNAME}`)"
     restart: unless-stopped
-    networks:
-      - traefik
-      - default
-
-networks:
-  traefik:
-    name: traefik_network

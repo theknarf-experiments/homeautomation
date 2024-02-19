@@ -1,0 +1,7 @@
+include:
+  - traefik.compose.yml
+  - comic.compose.yml
+  - multimedia/multimedia.compose.yml
+  - prometheus/prometheus.compose.yml
+  - networking.compose.yml
+  - syncthing.compose.yml

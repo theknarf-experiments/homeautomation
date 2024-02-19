@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.8"
 services:
   sonarr:
     image: linuxserver/sonarr # https://github.com/linuxserver/docker-sonarr
@@ -6,22 +6,20 @@ services:
     environment:
       - PUID=${DOCKER_PUID}
       - PGID=${DOCKER_PGID}
-      - TZ=${DOCKER_TIMEZONE}
       - UMASK_SET=022 #optional
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/sonarr:/config
-      - ${DOCKER_TV_SERIES_FOLDER}:/tv
-      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
-    restart: unless-stopped
+      - ${MEDIA_LOCATION}/tv:/tv
+      - ${MEDIA_LOCATION}/downloads:/downloads
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.localhost`) || Host(`sonarr.${DOCKER_DOMAINNAME}`)"
-      - "traefik.sonarr.port=8989"
       - "dave.relativeSubdomain=sonarr"
-    networks:
-      - traefik
-      - default
+    restart: unless-stopped
+    profiles:
+      - multimedia
 
   radarr:
     image: linuxserver/radarr
@@ -29,21 +27,19 @@ services:
     environment:
       - PUID=${DOCKER_PUID}
       - PGID=${DOCKER_PGID}
-      - TZ=${DOCKER_TIMEZONE}
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/radarr:/config
-      - ${DOCKER_MOVIES_FOLDER}:/movies
-      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
-    restart: unless-stopped
+      - ${MEDIA_LOCATION}/movies:/movies
+      - ${MEDIA_LOCATION}/downloads:/downloads
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.radarr.rule=Host(`radarr.localhost`) || Host(`radarr.${DOCKER_DOMAINNAME}`)"
-      - "traefik.sonarr.port=7878"
       - "dave.relativeSubdomain=radarr"
-    networks:
-      - traefik
-      - default
+    restart: unless-stopped
+    profiles:
+      - multimedia
 
   bazarr:
     image: linuxserver/bazarr
@@ -51,21 +47,19 @@ services:
     environment:
       - PUID=${DOCKER_PUID}
       - PGID=${DOCKER_PGID}
-      - TZ=${DOCKER_TIMEZONE}
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/bazarr:/config
-      - ${DOCKER_MOVIES_FOLDER}:/movies
-      - ${DOCKER_TV_SERIES_FOLDER}:/tv
-    restart: unless-stopped
+      - ${MEDIA_LOCATION}/movies:/movies
+      - ${MEDIA_LOCATION}/tv:/tv
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.bazarr.rule=Host(`bazarr.localhost`) || Host(`bazarr.${DOCKER_DOMAINNAME}`)"
-      - "traefik.sonarr.port=6767"
       - "dave.relativeSubdomain=bazarr"
-    networks:
-      - traefik
-      - default
+    restart: unless-stopped
+    profiles:
+      - multimedia
 
   transmission:
     image: linuxserver/transmission # https://hub.docker.com/r/linuxserver/transmission/
@@ -73,25 +67,23 @@ services:
     environment:
       - PUID=${DOCKER_PUID}
       - PGID=${DOCKER_PGID}
-      - TZ=${DOCKER_TIMEZONE}
-      - USER=${DOCKER_TORRENT_USERNAME}
+      - USER=${USER}
       - PASS=${DOCKER_TORRENT_PASSWORD}
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/transmission:/config
-      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
+      - ${MEDIA_LOCATION}/downloads:/downloads
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     ports:
       - 51413:51413
       - 51413:51413/udp
-    restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.transmission.rule=Host(`transmission.localhost`) || Host(`transmission.${DOCKER_DOMAINNAME}`)"
-      - "traefik.transmission.port=9091"
       - "dave.relativeSubdomain=transmission"
-    networks:
-      - traefik
-      - default
+    restart: unless-stopped
+    profiles:
+      - multimedia
 
   jackett:
     image: linuxserver/jackett # https://hub.docker.com/r/linuxserver/jackett/
@@ -99,20 +91,18 @@ services:
     environment:
       - PUID=${DOCKER_PUID}
       - PGID=${DOCKER_PGID}
-      - TZ=${DOCKER_TIMEZONE}
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/jackett:/config
-      - ${DOCKER_DOWNLOADS_FOLDER}:/downloads
-    restart: unless-stopped
+      - ${MEDIA_LOCATION}/downloads:/downloads
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.jackett.rule=Host(`jackett.localhost`) || Host(`jackett.${DOCKER_DOMAINNAME}`)"
-      - "traefik.jackett.port=9117"
       - "dave.relativeSubdomain=jackett"
-    networks:
-      - traefik
-      - default
+    restart: unless-stopped
+    profiles:
+      - multimedia
 
   jellyfin:
     image: ghcr.io/linuxserver/jellyfin:arm32v7-latest # https://hub.docker.com/r/linuxserver/jellyfin
@@ -120,12 +110,13 @@ services:
     environment:
       - PUID=${DOCKER_PUID}
       - PGID=${DOCKER_PGID}
-      - TZ=${DOCKER_TIMEZONE}
     volumes:
       - ${DOCKER_CONFIG_FOLDER}/jellyfin:/config
-      - ${DOCKER_TV_SERIES_FOLDER}:/data/tvshows
-      - ${DOCKER_MOVIES_FOLDER}:/data/movies
-      - ${DOCKER_YOUTUBE_DOWNLOADS_FOLDER}:/data/youtube
+      - ${MEDIA_LOCATION}/tv:/data/tvshows
+      - ${MEDIA_LOCATION}/movies:/data/movies
+      - ${MEDIA_LOCATION}/youtube:/data/youtube
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
 #      - /opt/vc/lib:/opt/vc/lib #optional
     devices:
       - /dev/video10:/dev/video10
@@ -133,37 +124,26 @@ services:
       - /dev/video12:/dev/video12
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.localhost`) || Host(`jellyfin.${DOCKER_DOMAINNAME}`)"
-      - "traefik.jellyfin.port=8096"
       - "dave.relativeSubdomain=jellyfin"
       - "dave.icon=simple-icons:jellyfin"
     restart: unless-stopped
-    networks:
-      - traefik
-      - default
+    profiles:
+      - multimedia
 
   metube:
     image: alexta69/metube
     container_name: metube
-    restart: unless-stopped
     user: "${DOCKER_PUID}:${DOCKER_PGID}"
-    ports:
-      - "8081:8081"
     volumes:
-      - ${DOCKER_YOUTUBE_DOWNLOADS_FOLDER}:/downloads
+      - ${MEDIA_LOCATION}/youtube:/downloads
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_network"
       - "traefik.http.routers.metube.rule=Host(`metube.localhost`) || Host(`metube.${DOCKER_DOMAINNAME}`)"
-      - "traefik.metube.port=8081"
       - "dave.relativeSubdomain=metube"
       - "dave.icon=mdi-youtube"
-    networks:
-      - traefik
-      - default
-
-networks:
-  traefik:
-    external:
-      name: traefik_network
+    restart: unless-stopped
+    profiles:
+      - multimedia
