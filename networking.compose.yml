@@ -39,3 +39,5 @@ services:
       - "dave.relativeSubdomain=librespeed"
       - "dave.icon=arcticons:librespeed"
     restart: unless-stopped
+    profiles:
+      - networking
