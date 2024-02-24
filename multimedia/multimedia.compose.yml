@@ -105,7 +105,7 @@ services:
       - multimedia
 
   jellyfin:
-    image: ghcr.io/linuxserver/jellyfin:arm32v7-latest # https://hub.docker.com/r/linuxserver/jellyfin
+    image: ghcr.io/linuxserver/jellyfin # https://hub.docker.com/r/linuxserver/jellyfin
     container_name: jellyfin
     environment:
       - PUID=${DOCKER_PUID}
@@ -117,11 +117,7 @@ services:
       - ${MEDIA_LOCATION}/youtube:/data/youtube
       - "/etc/timezone:/etc/timezone:ro"
       - "/etc/localtime:/etc/localtime:ro"
-#      - /opt/vc/lib:/opt/vc/lib #optional
-    devices:
-      - /dev/video10:/dev/video10
-      - /dev/video11:/dev/video11
-      - /dev/video12:/dev/video12
+      #- /opt/vc/lib:/opt/vc/lib #optional
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.localhost`) || Host(`jellyfin.${DOCKER_DOMAINNAME}`)"
