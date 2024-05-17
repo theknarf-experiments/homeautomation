@@ -5,3 +5,4 @@ include:
   - prometheus/prometheus.compose.yml
   - networking.compose.yml
   - syncthing.compose.yml
+  - adult.compose.yml

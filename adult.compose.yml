@@ -1,0 +1,43 @@
+version: "3.5"
+services:
+  stash:
+    container_name: stash
+    image: stashapp/stash:latest
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "2m"
+    user: "${DOCKER_PUID}:${DOCKER_PGID}"
+    command: stash --config /config/config.yml
+    environment:
+      - STASH_STASH=/data/
+      - STASH_GENERATED=/generated/
+      - STASH_METADATA=/metadata/
+      - STASH_CACHE=/cache/
+      - USER=user
+      - HOME=/config
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      ## Keep configs, scrapers, and plugins here.
+      - ${DOCKER_CONFIG_FOLDER}/stash:/config
+      ## Point this at your collection.
+      - ${MEDIA_LOCATION}/pr0n:/data
+      ## This is where your stash's metadata lives
+      - ${MEDIA_LOCATION}/pr0n//metadata:/metadata
+      ## Any other cache content.
+      - ${MEDIA_LOCATION}/pr0n/cache:/cache
+      ## Where to store binary blob data (scene covers, images)
+      - ${MEDIA_LOCATION}/pr0n/blobs:/blobs
+      ## Where to store generated content (screenshots,previews,transcodes,sprites)
+      - ${MEDIA_LOCATION}/pr0n/generated:/generated
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.stash.rule=Host(`stash.${DOCKER_DOMAINNAME}`)"
+      - "dave.relativeSubdomain=stash"
+      - "dave.icon=codicon:git-stash"
+    restart: unless-stopped
+    profiles:
+      - adult
+
+
