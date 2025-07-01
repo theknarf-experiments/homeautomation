@@ -1,13 +1,14 @@
 services:
   traefik:
     container_name: traefik
-    image: traefik:v3.0
+    image: traefik:v3.3
     command:
       - "--api.insecure=true"
       # Enabling docker provider
       - "--providers.docker"
       # Do not expose containers unless explicitly told so
       - "--providers.docker.exposedbydefault=false"
+      #- "--log.level=DEBUG"
     ports:
       - 80:80
       - 8080:8080
