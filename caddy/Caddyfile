@@ -1,0 +1,11 @@
+(dnsauth) {
+  tls {
+		dns digitalocean {env.DIGITALOCEAN_API_TOKEN}
+	}
+}
+
+rpi5.theknarf.com, *.rpi5.theknarf.com {
+  import dnsauth
+
+	reverse_proxy traefik:80
+}

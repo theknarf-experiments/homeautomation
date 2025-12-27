@@ -33,6 +33,7 @@ mkdir -p "$MEDIA_LOCATION/config/smokeping"
 mkdir -p "$MEDIA_LOCATION/config/librespeed"
 mkdir -p "$MEDIA_LOCATION/config/syncthing"
 mkdir -p "$MEDIA_LOCATION/config/stash"
+mkdir -p "$MEDIA_LOCATION/config/caddy"
 mkdir -p "$MEDIA_LOCATION/comic"
 mkdir -p "$MEDIA_LOCATION/downloads"
 mkdir -p "$MEDIA_LOCATION/youtube"
@@ -44,6 +45,7 @@ mkdir -p "$MEDIA_LOCATION/pr0n/metadata"
 mkdir -p "$MEDIA_LOCATION/pr0n/cache"
 mkdir -p "$MEDIA_LOCATION/pr0n/blobs"
 mkdir -p "$MEDIA_LOCATION/pr0n/generated"
+mkdir -p "$MEDIA_LOCATION/caddy"
 
 # Get digital ocean api token
 DIGITALOCEAN_API_TOKEN=$(prompt_for_input "Digitalocean api token" "" "secret")

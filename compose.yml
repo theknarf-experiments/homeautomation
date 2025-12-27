@@ -6,3 +6,4 @@ include:
   - networking.compose.yml
   - syncthing.compose.yml
   - adult.compose.yml
+  - caddy/caddy.compose.yml

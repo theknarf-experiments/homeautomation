@@ -1,0 +1,15 @@
+services:
+  caddy:
+    container_name: caddy
+    build:
+      context: ./
+      args:
+        - DIGITALOCEAN_API_TOKEN=${DIGITALOCEAN_API_TOKEN}
+    volumes:
+      - ${MEDIA_LOCATION}/config/caddy:/config
+      - ${MEDIA_LOCATION}/caddy:/data
+    ports:
+      - 443:443
+    restart: unless-stopped
+    profiles:
+      - caddy
